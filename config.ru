@@ -6,6 +6,5 @@ end
 
 
 use Rack::MethodOverride
+use MapController
 run ApplicationController
-# specify your controllers
-use HomeController
