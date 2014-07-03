@@ -1,15 +1,25 @@
-/* helper */
+/* box helper */
 .box-shadow {
   box-shadow: 0 2px 2px rgba(0,0,0,0.05),0 1px 0 rgba(0,0,0,0.05);
 }
+
+/* margin helper */
+.mtm {
+  margin-top: 15px;
+}
+
+/* text helper */
 .text-left {
   text-align: left !important;
 }
 .bold {
   font-weight: bold;
 }
-.mtm {
-  margin-top: 15px;
+.text-ellipsis {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* thumb img */
@@ -19,7 +29,6 @@
 
 /* navbar */
 .navbar-brand {
-  font-weight: bold;
   padding: 12px;
 }
 .navbar {
@@ -36,6 +45,39 @@
   font-weight: bold;
   font-size: 13px;
   text-transform: uppercase;
+}
+
+@media(max-width:767px){
+  .navbar-form {
+    display: inline-block;
+    width: auto;
+    border: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  .navbar-form .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+  }
+  .navbar-nav>li>a {
+    float: right;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    line-height: 20px;
+  }
+  .navbar-brand {
+    float: left;
+    margin-left: -3px !important;
+    padding: 12px 0px;
+    font-size: 18px;
+    line-height: 20px;
+    height: 50px;
+  }
 }
 
 /* form */
@@ -65,6 +107,9 @@
   color: #393c3d;
   text-shadow: 0 1px 0 #fff;
   box-shadow: 0 1px 1px 0 rgba(0,0,0,0.05);
+}
+.btn:focus, .btn:active:focus, .btn.active:focus {
+  outline: none;
 }
 .btn-primary {
   background-color: #2badf3;
