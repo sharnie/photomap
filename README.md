@@ -1,2 +1,2 @@
-sinatra_setup
+PHOTO MAP
 =============
