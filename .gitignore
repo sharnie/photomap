@@ -1,3 +1,6 @@
+test.rb
+.env
+
 *.gem
 *.rbc
 /.config

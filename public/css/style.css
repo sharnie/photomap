@@ -26,6 +26,19 @@ body {
   width: 2px;
   z-index: 2;
 }
+/* map search box */
+.pac-container {
+  box-shadow: 0 2px 2px rgba(0,0,0,0.05),0 1px 0 rgba(0,0,0,0.05);
+}
+.pac-item {
+  padding: 8px;
+}
+.pac-item:nth-child(odd) {
+  background-color: #FDFDFD;
+}
+.pac-item:hover, .pac-item:focus {
+  cursor: pointer;
+}
 
 /* sidebar */
 .sidebar {

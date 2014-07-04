@@ -46,7 +46,14 @@
   font-size: 13px;
   text-transform: uppercase;
 }
-
+.navbar-form .form-group {
+  width: 250px;
+}
+.navbar-form .form-control {
+  display: inline-block;
+  width: inherit;
+  vertical-align: middle;
+}
 @media(max-width:767px){
   .navbar-form {
     display: inline-block;
@@ -92,7 +99,9 @@
   box-shadow: none;
 }
 .form-control::-webkit-input-placeholder {
-  font-weight: 400;
+  opacity: 0.8;
+  font-family: helvetica;
+  font-weight: normal;
   color: #BCBCBC;
 }
 

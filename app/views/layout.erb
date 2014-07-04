@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 <head>
   <title>Map</title>
   <meta charset="UTF-8">
@@ -19,11 +19,8 @@
         <a class="navbar-brand" href="#">FIVE<span class="bold">SHOUT</span></a>
         <form class="navbar-form navbar-left hidden-xs" role="search">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search places...">
+            <input type="text" id="place-search" class="form-control" placeholder="Search places...">
           </div>
-          <button type="submit" class="btn btn-primary">
-            <i class="fa fa-search"></i>
-          </button>
         </form>
 
         <ul class="nav navbar-nav navbar-right">
@@ -40,6 +37,7 @@
     <script src="js/jquery-ui.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=true"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/underscore-min.js"></script>
     <script src="js/map.js"></script>
     <script src="js/app.js"></script>
   </footer>
