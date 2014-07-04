@@ -24,7 +24,11 @@
         </form>
 
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Sign in</a></li>
+          <% if user_signed_in? %>
+            <li><a href="/oauth/logout">Log out</a></li>
+          <% else %>
+            <li><a href="/oauth/connect">Sign in</a></li>
+          <% end %>
         </ul>
       </div>
     </nav>

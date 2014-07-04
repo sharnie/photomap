@@ -8,6 +8,16 @@
   margin-top: 15px;
 }
 
+/* bootstrap row gutter */
+.row-10-gutter {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+.col-10-gutter {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 /* text helper */
 .text-left {
   text-align: left !important;
@@ -96,7 +106,7 @@
 }
 .form-control:focus {
   border-color: #3498db;
-  box-shadow: none;
+  /*box-shadow: none;*/
 }
 .form-control::-webkit-input-placeholder {
   opacity: 0.8;

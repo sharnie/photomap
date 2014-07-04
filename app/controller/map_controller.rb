@@ -16,15 +16,11 @@ class MapController < ApplicationController
 
   # redirect user after authentication on Instagram and set access token
   get "/oauth/callback" do
-    response = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK_URL)
+    response               = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK_URL)
     session[:access_token] = response.access_token
-
     client                 = Instagram.client(access_token: session[:access_token])
     session[:instagram_id] = client.user.id
-
-    User.find_or_create_by(instagram_id: client.user.id) do |user|
-             user.username = client.user.username
-    end
+    User.find_or_create_by(instagram_id: client.user.id)
 
     redirect '/'
   end
@@ -34,7 +30,7 @@ class MapController < ApplicationController
     locations = []
     media = user_signed_in? ? CLIENT : Instagram
 
-    media.media_search(params[:lat], params[:lng], distance: 10).each do |data|
+    media.media_search(params[:lat], params[:lng], distance: 100).each do |data|
       caption = data.caption ? data.caption.text : ''
       locations <<  {
                       latitude:             data.location.latitude,
