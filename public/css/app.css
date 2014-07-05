@@ -130,6 +130,9 @@
 .btn:focus, .btn:active:focus, .btn.active:focus {
   outline: none;
 }
+.btn-default {
+  font-weight: bold;
+}
 .btn-primary {
   background-color: #2badf3;
   background-image: -webkit-linear-gradient(#2badf3, #2492db);
@@ -141,13 +144,4 @@
 }
 .btn-primary:hover, .btn-primary:focus {
   border-color: #1689c7;
-}
-.btn-warning {
-  background-color: #f89406;
-  background-image: -webkit-linear-gradient(top, #fbb450, #f89406);
-  background-image: linear-gradient(to bottom, #fbb450, #f89406);
-  border: 1px solid #d58512;
-  color: #fff;
-  text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.18),inset 0 0 1px 1px rgba(255,255,255,0.09);
 }

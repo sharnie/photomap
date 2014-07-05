@@ -39,13 +39,52 @@ $(document).ready(function(){
   function initialize(lat, lng) {
     var Latlng = new google.maps.LatLng(lat, lng);
 
+    var styles = [
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [
+          { lightness: 100 },
+          { visibility: "simplified" }
+        ]
+      },{
+        featureType: "road",
+        elementType: "labels.text.fill",
+        stylers: [
+          { color: "#333333" }
+        ]
+      },{
+        featureType: "road",
+        elementType: "labels.text.stroke",
+        stylers: [
+          { color: "#ffffff" }
+        ]
+      },{
+        featureType: "road",
+        elementType: "geometry.fill",
+        stylers: [
+          { visibility: "on" },
+          { color: "#ffffff" }
+        ]
+      },{
+        featureType: "road",
+        elementType: "geometry.stroke",
+        stylers: [
+          { visibility: "on" },
+          { color: "#D8D8D8" }
+        ]
+      }
+    ];
+
     var mapOptions = {
-        center            : Latlng,
-        zoom              : 16,
-        mapTypeId         : google.maps.MapTypeId.ROADMAP,
-        streetViewControl : false,
-        mapTypeControl    : false,
-        panControl        : false,
+        styles                : styles,
+        center                : Latlng,
+        zoom                  : 15,
+        mapTypeId             : google.maps.MapTypeId.ROADMAP,
+        streetViewControl     : false,
+        mapTypeControl        : false,
+        panControl            : false,
+        disableDoubleClickZoom: true,
     };
 
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
@@ -60,7 +99,11 @@ $(document).ready(function(){
       var places = searchBox.getPlaces();
       if (places.length == 0) {return;}
 
-      fetchImage(places[0].geometry.location.k, places[0].geometry.location.B);
+      currentLat = places[0].geometry.location.k;
+      currentLng = places[0].geometry.location.B;
+
+      fetchImage(currentLat, currentLng);
+
       map.panTo(places[0].geometry.location);
       map.setZoom(15);
     });
@@ -88,7 +131,7 @@ $(document).ready(function(){
       var html = [];
       var templateString = [
         "        <div class='col-md-4 col-10-gutter'>",
-        "          <div class='thumbnail'>",
+        "          <div class='thumbnail' data-id='<%= image.id %>'>",
         "            <div class='media-head'>",
         "              <img src='<%= image.low_resolution %>' alt='...'>",
         "              <span class='caption'></span>",
@@ -142,6 +185,8 @@ $(document).ready(function(){
         });
 
         google.maps.event.addListener(marker, 'click', markerClick); // marker click event
+        // google.maps.event.addListener(marker, 'mouseover', markerHover); // marker click event
+
         markers.push(marker);
       });
 
@@ -149,21 +194,30 @@ $(document).ready(function(){
     });
   }
 
-  function markerClick(marker){
-    // var marker;
+  var that;
+  function markerClick(){
+    if(that){that.setZIndex();}
+    that = this;
 
-    // if(marker){
-    //   marker.setZIndex();
-    // }
-
-    // marker = this;
     this.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
 
-    // $.each(markers, function(marker){
-    //   marker.setIcon(defaultIcon);
-    // });
+    var markerDefault = {
+        url         : defaultIcon,
+        origin      : new google.maps.Point(0,0),
+        anchor      : new google.maps.Point(0,0),
+    };
 
-    // marker.setIcon(activeIcon);
+    var markerActive  = {
+        url         : activeIcon,
+        origin      : new google.maps.Point(0,0),
+        anchor      : new google.maps.Point(0,0),
+    };
+
+    $.each(markers, function(index, marker){
+      marker.setIcon(markerDefault);
+    });
+
+    this.setIcon(markerActive); 
   }
 
   function removeMarkers(markers){
@@ -174,6 +228,7 @@ $(document).ready(function(){
     $('#result').html('');
   }
 
+  // jQuery UI Slider
   $(function() {
     $("#slider").slider({
       range : "max",
@@ -185,13 +240,24 @@ $(document).ready(function(){
                 $("#radius").val(ui.value + ' KM');
               },
      change : function(event, ui) {
-                console.log(currentLat, currentLng);
+                removeMarkers(markers);
+                fetchImage(currentLat, currentLng);
               }
     });
   });
 
   $('button#clear-markers').click(function(){
     removeMarkers(markers);
+  });
+
+  $('#result').on('mouseenter', '.thumbnail', function(e){
+    e.preventDefault();
+    var thumbnail = $(this);
+    _.select(markers, function(marker) {
+      if(marker.id === thumbnail.data('id')) {
+        google.maps.event.trigger(marker, 'click');
+      }
+    });
   });
 
 });
