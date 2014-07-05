@@ -218,7 +218,6 @@ $(document).ready(function(){
     });
 
     this.setIcon(markerActive);
-    // console.log(this);
     map.panTo(this.position);
   }
 
