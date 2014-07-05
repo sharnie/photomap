@@ -25,12 +25,12 @@ class MapController < ApplicationController
     redirect '/'
   end
 
-  get '/map/:lat/:lng/media_search.json' do
+  get '/map/:lat/:lng/:radius/media_search.json' do
     content_type :json
     locations = []
     media = user_signed_in? ? CLIENT : Instagram
 
-    media.media_search(params[:lat], params[:lng], distance: 100).each do |data|
+    media.media_search(params[:lat], params[:lng], distance: params[:radius]).each do |data|
       caption = data.caption ? data.caption.text : ''
       locations <<  {
                       latitude:             data.location.latitude,

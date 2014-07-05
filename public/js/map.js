@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  var map;
+  var map, currentLat, currentLng;
 
   // get location
   (function getLocation() {
@@ -12,7 +12,9 @@ $(document).ready(function(){
 
   // set location
   function setLocation(position) {
-    initialize(position.coords.latitude, position.coords.longitude);
+    currentLat = position.coords.latitude;
+    currentLng = position.coords.longitude;
+    initialize(currentLat, currentLng);
   }
 
   // get error
@@ -48,7 +50,7 @@ $(document).ready(function(){
 
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+    fetchImage(currentLat, currentLng);
 
     // Create the search box and link it to the UI element.
     var input = (document.getElementById('place-search'));
@@ -56,9 +58,7 @@ $(document).ready(function(){
 
     google.maps.event.addListener(searchBox, 'places_changed', function() {
       var places = searchBox.getPlaces();
-      if (places.length == 0) {
-        return;
-      }
+      if (places.length == 0) {return;}
 
       fetchImage(places[0].geometry.location.k, places[0].geometry.location.B);
       map.panTo(places[0].geometry.location);
@@ -66,16 +66,23 @@ $(document).ready(function(){
     });
 
     google.maps.event.addListener(map, 'rightclick', function(event){
-      fetchImage(event.latLng.lat(), event.latLng.lng());
+      currentLat = event.latLng.lat();
+      currentLng = event.latLng.lng();
+
+      fetchImage(currentLat, currentLng);
     });
 
   }
 
 
-  var markers = [];
+  var markers     = [];
+  var defaultIcon = '/images/marker3.png';
+  var activeIcon  = '/images/marker_active.png';
 
-  function fetchImage(lat, lng, radius){
-    var url = '/map/' + lat + '/' + lng + '/media_search.json';
+  function fetchImage(lat, lng){
+    var radius = $('#radius-slider').data('radius');
+
+    var url = '/map/' + lat + '/' + lng + '/'+ radius +'/media_search.json';
 
     $.getJSON(url).success(function(images){
       var html = [];
@@ -120,7 +127,7 @@ $(document).ready(function(){
         html += template({image: image});
 
         var marker_image = {
-            url         : '/images/marker3.png',
+            url         : defaultIcon,
             origin      : new google.maps.Point(0,0),
             anchor      : new google.maps.Point(0,0)
         };
@@ -134,6 +141,7 @@ $(document).ready(function(){
             visible     : true,
         });
 
+        google.maps.event.addListener(marker, 'click', markerClick); // marker click event
         markers.push(marker);
       });
 
@@ -141,11 +149,46 @@ $(document).ready(function(){
     });
   }
 
+  function markerClick(marker){
+    // var marker;
+
+    // if(marker){
+    //   marker.setZIndex();
+    // }
+
+    // marker = this;
+    this.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
+
+    // $.each(markers, function(marker){
+    //   marker.setIcon(defaultIcon);
+    // });
+
+    // marker.setIcon(activeIcon);
+  }
+
   function removeMarkers(markers){
     $.each(markers, function(id, marker){
       marker.setMap(null);
     });
+
+    $('#result').html('');
   }
+
+  $(function() {
+    $("#slider").slider({
+      range : "max",
+        min : 10,
+        max : 1000,
+      value : $("#radius").val(),
+      slide : function(event, ui) {
+                $('#radius-slider').data('radius', ui.value);
+                $("#radius").val(ui.value + ' KM');
+              },
+     change : function(event, ui) {
+                console.log(currentLat, currentLng);
+              }
+    });
+  });
 
   $('button#clear-markers').click(function(){
     removeMarkers(markers);
