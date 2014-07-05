@@ -217,7 +217,9 @@ $(document).ready(function(){
       marker.setIcon(markerDefault);
     });
 
-    this.setIcon(markerActive); 
+    this.setIcon(markerActive);
+    // console.log(this);
+    map.panTo(this.position);
   }
 
   function removeMarkers(markers){
