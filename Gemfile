@@ -1,15 +1,21 @@
 source 'http://rubygems.org'
+ruby "2.1.2"
 
 gem 'sinatra'
 gem 'activerecord', require: 'active_record'
 gem 'sinatra-activerecord', require: 'sinatra/activerecord'
-# gem 'pg'
-gem 'sqlite3'
+gem 'instagram'
 gem 'rake'
 gem 'require_all'
-gem 'shotgun'
-gem 'pry'
+gem 'dotenv'
 
-group :test do
+group :production do
+  gem 'pg', '~> 0.17.1'
+end
+
+group :test, :development do
+  gem 'shotgun'
+  gem 'sqlite3'
+  gem 'pry'
   gem 'rspec'
 end
