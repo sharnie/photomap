@@ -119,6 +119,7 @@ $(document).ready(function(){
 
 
   var markers     = [];
+  var tracker     = {};
   var defaultIcon = '/images/marker3.png';
   var activeIcon  = '/images/marker_active.png';
 
@@ -133,6 +134,9 @@ $(document).ready(function(){
         "        <div class='col-md-4 col-10-gutter'>",
         "          <div class='thumbnail' data-id='<%= image.id %>'>",
         "            <div class='media-head'>",
+        "              <div class='like'>",
+        "                <i class='fa fa-heart'></i>",
+        "              </div>",
         "              <img src='<%= image.low_resolution %>' alt='...'>",
         "              <span class='caption'></span>",
         "            </div>",
@@ -167,27 +171,33 @@ $(document).ready(function(){
 
       _.each(images, function(image){
         var template = _.template(templateString.join("\n"));
-        html += template({image: image});
 
-        var marker_image = {
-            url         : defaultIcon,
-            origin      : new google.maps.Point(0,0),
-            anchor      : new google.maps.Point(0,0)
-        };
+        var marker_image, newMarker;
 
-        var marker = new google.maps.Marker({
-            id          : image.id,
-            position    : new google.maps.LatLng(image.latitude, image.longitude),
-            map         : map,
-            icon        : marker_image,
-            clickable   : true,
-            visible     : true,
-        });
+        if(!tracker.hasOwnProperty(image.id)){
+          html += template({image: image});
 
-        google.maps.event.addListener(marker, 'click', markerClick); // marker click event
-        // google.maps.event.addListener(marker, 'mouseover', markerHover); // marker click event
+          marker_image = {
+              url         : defaultIcon,
+              origin      : new google.maps.Point(0,0),
+              anchor      : new google.maps.Point(0,0)
+          };
 
-        markers.push(marker);
+          newMarker = new google.maps.Marker({
+              id          : image.id,
+              position    : new google.maps.LatLng(image.latitude, image.longitude),
+              map         : map,
+              icon        : marker_image,
+              clickable   : true,
+              visible     : true,
+          });
+
+          tracker[newMarker.id] = newMarker;
+          markers.push(newMarker);
+
+          google.maps.event.addListener(newMarker, 'click', markerClick);
+        }
+
       });
 
       $('#result').prepend(html);
@@ -218,7 +228,7 @@ $(document).ready(function(){
     });
 
     this.setIcon(markerActive);
-    map.panTo(this.position);
+    // map.panTo(this.position);
   }
 
   function removeMarkers(markers){
@@ -235,7 +245,7 @@ $(document).ready(function(){
       range : "max",
         min : 10,
         max : 1000,
-      value : $("#radius").val(),
+      value : 100, // $("#radius").val()
       slide : function(event, ui) {
                 $('#radius-slider').data('radius', ui.value);
                 $("#radius").val(ui.value + ' KM');

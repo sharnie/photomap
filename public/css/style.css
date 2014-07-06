@@ -143,6 +143,19 @@ body {
 .media-head img {
   width: 100%;
 }
+.media-head .like {
+  position: absolute;
+  top: 6px;
+  left: 14px;
+  z-index: 100;
+  font-size: 22px;
+  color: rgba(0,0,0,0.6);
+  cursor: pointer;
+}
+.media-head i.fa-heart.liked {
+  opacity: 1;
+  color: #E10979;
+}
 .media-head:after {
   content: "";
   position: absolute;
@@ -168,7 +181,6 @@ body {
   color: #fff;
   display: none;
 }
-
 .media-body {
   position: relative;
 }
