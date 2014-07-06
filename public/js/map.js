@@ -21,7 +21,9 @@ $(document).ready(function(){
   function getError(error){
     switch(error.code){
       case error.PERMISSION_DENIED:
-        initialize(40.7035617, -73.9883172);
+        currentLat = 40.7035617;
+        currentLng = -73.9883172
+        initialize(currentLat, currentLng);
         break;
       case error.POSITION_UNAVAILABLE:
         alert("Location information is unavailable.");
@@ -105,10 +107,11 @@ $(document).ready(function(){
       fetchImage(currentLat, currentLng);
 
       map.panTo(places[0].geometry.location);
-      map.setZoom(15);
+      map.setZoom(16);
+      removeMarkers(markers);
     });
 
-    google.maps.event.addListener(map, 'rightclick', function(event){
+    google.maps.event.addListener(map, 'dblclick', function(event){
       currentLat = event.latLng.lat();
       currentLng = event.latLng.lng();
 
@@ -130,46 +133,51 @@ $(document).ready(function(){
 
     $.getJSON(url).success(function(images){
       var html = [];
-      var templateString = [
-        "        <div class='col-md-4 col-10-gutter'>",
-        "          <div class='thumbnail' data-id='<%= image.id %>'>",
-        "            <div class='media-head'>",
-        "              <div class='like'>",
-        "                <i class='fa fa-heart'></i>",
-        "              </div>",
-        "              <img src='<%= image.low_resolution %>' alt='...'>",
-        "              <span class='caption'></span>",
-        "            </div>",
-        "            <div class='media-foot'>",
-        "              <div class='col-xs-8'>",
-        "                <div class='row'>",
-        "                  <div class='media'>",
-        "                    <a class='avatar pull-left' href='#'>",
-        "                      <img class='thumb-sm' src='<%= image.user.profile_picture %>' alt='...'>",
-        "                    </a>",
-        "                    <div class='media-user text-muted'>",
-        "                      <a class='bold username text-ellipsis' href='#'><%= image.user.username %></a>",
-        "                      <p class='text-ellipsis'><%= image.user.full_name %></p>",
-        "                    </div>",
-        "                  </div><!-- .media -->",
-        "                </div><!-- .row -->",
-        "              </div><!-- .col-xs-* -->",
-        "              <div class='col-xs-4'>",
-        "                <div class='row'>",
-        "                  <div class='pull-right'>",
-        "                  <button class='btn btn-primary'>",
-        "                    <i class='fa fa-plus'></i>",
-        "                    <i class='fa fa-user'></i>",
-        "                  </button>",
-        "                  </div>",
-        "                </div>",
-        "              </div>",
-        "            </div><!-- .caption -->",
-        "          </div><!-- .thumbnail -->",
-        "        </div><!-- col-md-6-* -->"
-      ];
 
       _.each(images, function(image){
+        var templateString = [
+          "        <div class='col-md-4 col-10-gutter'>",
+          "          <div class='thumbnail' data-id='<%= image.id %>'>",
+          "            <div class='media-head'>",
+          "              <div class='like'>",
+          "                <% if(image.user_has_liked) { %>",
+          "                  <i class='fa fa-heart liked'></i>",
+          "                <% } else { %>",
+          "                  <i class='fa fa-heart'></i>",
+          "                <% } %>",
+          "              </div>",
+          "              <img src='<%= image.low_resolution %>' alt='...'>",
+          "              <span class='caption'></span>",
+          "            </div>",
+          "            <div class='media-foot'>",
+          "              <div class='col-xs-8'>",
+          "                <div class='row'>",
+          "                  <div class='media'>",
+          "                    <a class='avatar pull-left' href='#'>",
+          "                      <img class='thumb-sm' src='<%= image.user.profile_picture %>' alt='...'>",
+          "                    </a>",
+          "                    <div class='media-user text-muted'>",
+          "                      <a class='bold username text-ellipsis' href='#'><%= image.user.username %></a>",
+          "                      <p class='text-ellipsis'><%= image.user.full_name %></p>",
+          "                    </div>",
+          "                  </div><!-- .media -->",
+          "                </div><!-- .row -->",
+          "              </div><!-- .col-xs-* -->",
+          "              <div class='col-xs-4'>",
+          "                <div class='row'>",
+          "                  <div class='relationship pull-right'>",
+          "                  <button class='btn btn-primary'>",
+          "                    <i class='fa fa-plus'></i>",
+          "                    <i class='fa fa-user'></i>",
+          "                  </button>",
+          "                  </div>",
+          "                </div>",
+          "              </div>",
+          "            </div><!-- .caption -->",
+          "          </div><!-- .thumbnail -->",
+          "        </div><!-- col-md-6-* -->"
+        ];
+
         var template = _.template(templateString.join("\n"));
 
         var marker_image, newMarker;
@@ -237,15 +245,18 @@ $(document).ready(function(){
     });
 
     $('#result').html('');
+
+    markers.length = 0;
+    tracker = {};
   }
 
   // jQuery UI Slider
   $(function() {
     $("#slider").slider({
       range : "max",
-        min : 10,
+        min : 1,
         max : 1000,
-      value : 100, // $("#radius").val()
+      value : 30,
       slide : function(event, ui) {
                 $('#radius-slider').data('radius', ui.value);
                 $("#radius").val(ui.value + ' KM');
@@ -269,6 +280,46 @@ $(document).ready(function(){
         google.maps.event.trigger(marker, 'click');
       }
     });
+  });
+
+  $('#result').on('click', '.like', function(e){
+    e.preventDefault();
+    var like     = $(this);
+    var image_id = like.closest('.thumbnail').data('id');
+    var heart    = like.children('i.fa')
+
+    if(like.children('i.fa').hasClass('liked')){
+      heart.removeClass('liked');
+
+      $.getJSON('/unlike/' + image_id).fail(function(){
+        heart.addClass('liked');
+        alert('Something went wrong!');
+      });
+    } else {
+      heart.addClass('liked');
+      
+      $.getJSON('/like/' + image_id).fail(function(){
+        heart.removeClass('liked');
+        alert('Something went wrong!');
+      });
+    }
+  });
+
+  $('#result').on('click', '.relationship', function(e){
+    e.preventDefault();
+    var button = $(this).children('button.btn');
+
+    if(button.hasClass('btn-primary')){
+      // follow user
+      button.removeClass('btn-primary')
+      button.addClass('btn-success');
+      button.html("<i class='fa fa-check'></i> <i class='fa fa-user'></i>");
+    } else {
+      // unfollow user
+      button.addClass('btn-primary')
+      button.removeClass('btn-success');
+      button.html("<i class='fa fa-plus'></i> <i class='fa fa-user'></i>");
+    }
   });
 
 });

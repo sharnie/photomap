@@ -69,6 +69,12 @@ class MapController < ApplicationController
     response.to_json
   end
 
+  get '/unlike/:image_id' do
+    content_type :json
+    response = CLIENT.unlike_media(params[:image_id])
+    response.to_json
+  end
+
   # GET, MODIFY RELATIONSHIP
   get '/users/:id/relationship.json' do
     content_type :json
