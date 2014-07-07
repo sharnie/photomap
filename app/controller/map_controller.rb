@@ -1,5 +1,6 @@
 class MapController < ApplicationController
   get '/' do
+    @user = CLIENT.user if user_signed_in?
     erb :'map/index'
   end
 
