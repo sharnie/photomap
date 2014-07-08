@@ -75,6 +75,41 @@ $(document).ready(function(){
           { visibility: "on" },
           { color: "#D8D8D8" }
         ]
+      },
+      {
+        featureType: "water",
+        elementType: "fill",
+        stylers: [
+          { color: "#81C9EA" }
+        ]
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.stroke",
+        stylers: [
+          { visibility: "off" }
+        ]
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.fill",
+        stylers: [
+          { color: "#ffffff" }
+        ]
+      },
+      {
+        featureType: "administrative.province",
+        elementType: "labels.text.fill",
+        stylers: [
+          { color: "#ffffff" }
+        ]
+      },
+      {
+        featureType: "administrative.province",
+        elementType: "labels.text.stroke",
+        stylers: [
+          { visibility: "off" }
+        ]
       }
     ];
 
@@ -139,13 +174,6 @@ $(document).ready(function(){
           "        <div class='col-md-4 col-10-gutter'>",
           "          <div class='thumbnail' data-id='<%= image.id %>'>",
           "            <div class='media-head'>",
-          // "              <div class='like'>",
-          // "                <% if(image.user_has_liked) { %>",
-          // "                  <i class='fa fa-heart liked'></i>",
-          // "                <% } else { %>",
-          // "                  <i class='fa fa-heart'></i>",
-          // "                <% } %>",
-          // "              </div>",
           "              <img src='<%= image.low_resolution %>' alt='...'>",
           "              <span class='caption'></span>",
           "            </div>",
@@ -167,7 +195,7 @@ $(document).ready(function(){
           "                <div class='row'>",
           "                  <div class='pull-right like' data-image-id='<%= image.id %>'>",
           "                    <% if(image.user_has_liked) { %>",
-          "                      <button class='btn btn-primary'>",
+          "                      <button class='btn btn-default btn-like'>",
           "                        <i class='fa fa-heart'></i>",
           "                      </button>",
           "                    <% } else { %>",
@@ -261,8 +289,9 @@ $(document).ready(function(){
   $(function() {
     $("#slider").slider({
       range : "max",
-        min : 1,
+        min : 10,
         max : 1000,
+        step: 10, 
       value : 20,
       slide : function(event, ui) {
                 $('#radius-slider').data('radius', ui.value);
@@ -293,29 +322,29 @@ $(document).ready(function(){
     var image_id = like.data('image-id');
     var button   = like.children('button.btn');
 
-    if(button.hasClass('btn-default')){
-      likeButton(button);
-
-      $.getJSON('/like/' + image_id).fail(function(){
-        unlikeButton(button);
-        errorAlert();
-      });
-    } else {
+    if(button.hasClass('btn-like')){
       unlikeButton(button);
       
       $.getJSON('/unlike/' + image_id).fail(function(){
         likeButton(button);
         errorAlert();
       });
+    } else {
+      likeButton(button);
+
+      $.getJSON('/like/' + image_id).fail(function(){
+        unlikeButton(button);
+        errorAlert();
+      });
     }
   });
 
   function likeButton(element){
-    element.addClass('btn-primary').removeClass('btn-default');
+    element.addClass('btn-like');
   }
 
   function unlikeButton(element){
-    element.removeClass('btn-primary').addClass('btn-default');
+    element.removeClass('btn-like');
   }
 
   // follow and unfollow user

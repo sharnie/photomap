@@ -142,16 +142,11 @@
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.18),inset 0 0 1px 1px rgba(255,255,255,0.09);
 }
 .btn-like {
-  color: #fff;
-  border: 1px solid #960101 !important;
-  background: #b30808;
-  background: -webkit-gradient(linear, center top, center bottom, from(#E10979), to(#ba0060)) !important;
-  background: -moz-linear-gradient(top, #E10979, #ba0060) !important;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd52b2a', endColorstr='#ffb30808', GradientType=0) !important;
-  text-shadow: 1px 0px 0px rgba(0,0,0,0.4);
+  color: #D4374D;
+  text-shadow: 1px 1px 0px #fff;
 }
 .btn-like:hover, .btn-like:focus {
-  color: #fff;
+  color: #D4374D;
 }
 .btn-primary {
   color: #fff;
