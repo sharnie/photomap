@@ -13,7 +13,7 @@
     <div class = "thumbnails">
       <ul> 
         
-        <% @user.images.each do %>
+        <%= @client.user_recent_media(@user) %>
           <li>
             <img class = "box-shadow" src="http://img3.wikia.nocookie.net/__cb20111014130411/mylittlebrony/images/a/a9/250px-AppleBloomSquare.png">
           </li>
