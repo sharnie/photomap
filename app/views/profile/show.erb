@@ -13,11 +13,12 @@
     <div class = "thumbnails">
       <ul> 
         
-        <%= @client.user_recent_media(@user) %>
+        <% @user_photos.each do |user| %>
+          <img src="<%= user.images.standard_resolution.url %>">
+        <% end %>
           <li>
             <img class = "box-shadow" src="http://img3.wikia.nocookie.net/__cb20111014130411/mylittlebrony/images/a/a9/250px-AppleBloomSquare.png">
           </li>
-        <% end %>
       </ul>
     </div>
   

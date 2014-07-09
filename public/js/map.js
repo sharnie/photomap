@@ -291,7 +291,7 @@ $(document).ready(function(){
       range : "max",
         min : 10,
         max : 1000,
-        step: 10, 
+        step: 5, 
       value : 20,
       slide : function(event, ui) {
                 $('#radius-slider').data('radius', ui.value);
