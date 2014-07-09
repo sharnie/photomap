@@ -7,4 +7,5 @@ end
 
 use Rack::MethodOverride
 use MapController
+use ProfileController
 run ApplicationController

@@ -1,0 +1,24 @@
+<div id="profile-container">
+  
+  <div class="user-info">
+    <ul>
+      <li>
+        <img class = "box-shadow" src="http://img3.wikia.nocookie.net/__cb20111014130411/mylittlebrony/images/a/a9/250px-AppleBloomSquare.png"> </li>
+      <li class="li-text bold">MyLilPony1234</li>
+      <li class="li-text">2 hours ago</li>
+    </ul>
+  </div>
+  
+  <div class="user-imgs box-shadow">
+    <div class = "thumbnails">
+      <ul> 
+        
+        <%= @client.user_recent_media(@user) %>
+          <li>
+            <img class = "box-shadow" src="http://img3.wikia.nocookie.net/__cb20111014130411/mylittlebrony/images/a/a9/250px-AppleBloomSquare.png">
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  
+  </div>
