@@ -20,7 +20,7 @@
 
         <ul class="nav navbar-nav navbar-right">
           <% if user_signed_in? %>
-            <li><a href="#">Profile</a></li>
+            <li><a id="current-user" data-user-id="<%= @user.id %>" href="#">Profile</a></li>
             <li><a href="/oauth/logout">Log out</a></li>
           <% else %>
             <li><a href="/oauth/connect">Sign in</a></li>

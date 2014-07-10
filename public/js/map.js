@@ -75,13 +75,48 @@ $(document).ready(function(){
           { visibility: "on" },
           { color: "#D8D8D8" }
         ]
+      },
+      {
+        featureType: "water",
+        elementType: "fill",
+        stylers: [
+          { color: "#81C9EA" }
+        ]
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.stroke",
+        stylers: [
+          { visibility: "off" }
+        ]
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.fill",
+        stylers: [
+          { color: "#ffffff" }
+        ]
+      },
+      {
+        featureType: "administrative.province",
+        elementType: "labels.text.fill",
+        stylers: [
+          { color: "#ffffff" }
+        ]
+      },
+      {
+        featureType: "administrative.province",
+        elementType: "labels.text.stroke",
+        stylers: [
+          { visibility: "off" }
+        ]
       }
     ];
 
     var mapOptions = {
         styles                : styles,
         center                : Latlng,
-        zoom                  : 15,
+        zoom                  : 17,
         mapTypeId             : google.maps.MapTypeId.ROADMAP,
         streetViewControl     : false,
         mapTypeControl        : false,
@@ -111,7 +146,7 @@ $(document).ready(function(){
       removeMarkers(markers);
     });
 
-    google.maps.event.addListener(map, 'dblclick', function(event){
+    google.maps.event.addListener(map, 'click', function(event){
       currentLat = event.latLng.lat();
       currentLng = event.latLng.lng();
 
@@ -119,7 +154,6 @@ $(document).ready(function(){
     });
 
   }
-
 
   var markers     = [];
   var tracker     = {};
@@ -139,13 +173,6 @@ $(document).ready(function(){
           "        <div class='col-md-4 col-10-gutter'>",
           "          <div class='thumbnail' data-id='<%= image.id %>'>",
           "            <div class='media-head'>",
-          "              <div class='like'>",
-          "                <% if(image.user_has_liked) { %>",
-          "                  <i class='fa fa-heart liked'></i>",
-          "                <% } else { %>",
-          "                  <i class='fa fa-heart'></i>",
-          "                <% } %>",
-          "              </div>",
           "              <img src='<%= image.low_resolution %>' alt='...'>",
           "              <span class='caption'></span>",
           "            </div>",
@@ -157,7 +184,7 @@ $(document).ready(function(){
           "                      <img class='thumb-sm' src='<%= image.user.profile_picture %>' alt='...'>",
           "                    </a>",
           "                    <div class='media-user text-muted'>",
-          "                      <a class='bold username text-ellipsis' href='#'><%= image.user.username %></a>",
+          "                      <a class='bold username text-ellipsis' href='http://instagram.com/<%= image.user.username %>' target='_blank'><%= image.user.username %></a>",
           "                      <p class='text-ellipsis'><%= image.user.full_name %></p>",
           "                    </div>",
           "                  </div><!-- .media -->",
@@ -165,11 +192,16 @@ $(document).ready(function(){
           "              </div><!-- .col-xs-* -->",
           "              <div class='col-xs-4'>",
           "                <div class='row'>",
-          "                  <div class='relationship pull-right'>",
-          "                  <button class='btn btn-primary'>",
-          "                    <i class='fa fa-plus'></i>",
-          "                    <i class='fa fa-user'></i>",
-          "                  </button>",
+          "                  <div class='pull-right like' data-image-id='<%= image.id %>'>",
+          "                    <% if(image.user_has_liked) { %>",
+          "                      <button class='btn btn-default btn-like'>",
+          "                        <i class='fa fa-heart'></i>",
+          "                      </button>",
+          "                    <% } else { %>",
+          "                      <button class='btn btn-default'>",
+          "                        <i class='fa fa-heart'></i>",
+          "                      </button>",
+          "                    <% } %>",
           "                  </div>",
           "                </div>",
           "              </div>",
@@ -212,11 +244,7 @@ $(document).ready(function(){
     });
   }
 
-  var that;
   function markerClick(){
-    if(that){that.setZIndex();}
-    that = this;
-
     this.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
 
     var markerDefault = {
@@ -239,6 +267,7 @@ $(document).ready(function(){
     // map.panTo(this.position);
   }
 
+  // remove all markers from map and images from sidebar
   function removeMarkers(markers){
     $.each(markers, function(id, marker){
       marker.setMap(null);
@@ -250,16 +279,22 @@ $(document).ready(function(){
     tracker = {};
   }
 
+  // call removeMarkers function and then remove markers and images
+  $('button#clear-markers').click(function(){
+    removeMarkers(markers);
+  });
+
   // jQuery UI Slider
   $(function() {
     $("#slider").slider({
       range : "max",
-        min : 1,
+        min : 10,
         max : 1000,
-      value : 30,
+        step: 5, 
+      value : 20,
       slide : function(event, ui) {
                 $('#radius-slider').data('radius', ui.value);
-                $("#radius").val(ui.value + ' KM');
+                $("#radius").val(Math.round(ui.value * 1.60934) + ' MILES');
               },
      change : function(event, ui) {
                 removeMarkers(markers);
@@ -268,10 +303,7 @@ $(document).ready(function(){
     });
   });
 
-  $('button#clear-markers').click(function(){
-    removeMarkers(markers);
-  });
-
+  // show active marker when hover image
   $('#result').on('mouseenter', '.thumbnail', function(e){
     e.preventDefault();
     var thumbnail = $(this);
@@ -282,44 +314,76 @@ $(document).ready(function(){
     });
   });
 
+  // like and unlike image
   $('#result').on('click', '.like', function(e){
     e.preventDefault();
     var like     = $(this);
-    var image_id = like.closest('.thumbnail').data('id');
-    var heart    = like.children('i.fa')
+    var image_id = like.data('image-id');
+    var button   = like.children('button.btn');
 
-    if(like.children('i.fa').hasClass('liked')){
-      heart.removeClass('liked');
-
+    if(button.hasClass('btn-like')){
+      unlikeButton(button);
+      
       $.getJSON('/unlike/' + image_id).fail(function(){
-        heart.addClass('liked');
-        alert('Something went wrong!');
+        likeButton(button);
+        errorAlert();
       });
     } else {
-      heart.addClass('liked');
-      
+      likeButton(button);
+
       $.getJSON('/like/' + image_id).fail(function(){
-        heart.removeClass('liked');
-        alert('Something went wrong!');
+        unlikeButton(button);
+        errorAlert();
       });
     }
   });
 
+  function likeButton(element){
+    element.addClass('btn-like');
+  }
+
+  function unlikeButton(element){
+    element.removeClass('btn-like');
+  }
+
+  // follow and unfollow user
   $('#result').on('click', '.relationship', function(e){
     e.preventDefault();
-    var button = $(this).children('button.btn');
+    var button  = $(this).children('button.btn');
+    var user_id = $(this).data('user-id');
 
     if(button.hasClass('btn-primary')){
-      // follow user
-      button.removeClass('btn-primary')
-      button.addClass('btn-success');
-      button.html("<i class='fa fa-check'></i> <i class='fa fa-user'></i>");
+      successButton(button);
+
+      $.getJSON('/users/' + user_id + '/follow.json').fail(function(){
+        primaryButton(button);
+        errorAlert();
+      });
     } else {
-      // unfollow user
-      button.addClass('btn-primary')
-      button.removeClass('btn-success');
-      button.html("<i class='fa fa-plus'></i> <i class='fa fa-user'></i>");
+      primaryButton(button);
+
+      $.getJSON('/users/' + user_id + '/unfollow.json').fail(function(){
+        successButton(button);
+        errorAlert();
+      });
     }
   });
+
+  // set primary button
+  function primaryButton(element){
+    element.addClass('btn-primary').removeClass('btn-success');
+    element.html("<i class='fa fa-plus'></i> <i class='fa fa-user'></i>");
+  }
+
+  // set success button
+  function successButton(element){
+    element.addClass('btn-success').removeClass('btn-primary');
+    element.html("<i class='fa fa-check'></i> <i class='fa fa-user'></i>");
+  }
+
+  // display error alert
+  function errorAlert() {
+    alert('Something went wrong. Please make sure you\'re signed in.');
+  }
 
 });
