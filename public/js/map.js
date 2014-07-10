@@ -116,7 +116,7 @@ $(document).ready(function(){
     var mapOptions = {
         styles                : styles,
         center                : Latlng,
-        zoom                  : 17,
+        zoom                  : 18,
         mapTypeId             : google.maps.MapTypeId.ROADMAP,
         streetViewControl     : false,
         mapTypeControl        : false,
@@ -156,15 +156,16 @@ $(document).ready(function(){
   }
 
   var markers     = [];
+  var circles     = [];
   var tracker     = {};
   var defaultIcon = '/images/marker3.png';
   var activeIcon  = '/images/marker_active.png';
 
   function fetchImage(lat, lng){
     var radius = $('#radius-slider').data('radius');
-    console.log(radius);
-
     var url = '/map/' + lat + '/' + lng + '/'+ radius +'/media_search.json';
+
+    removeCircles(circles);
 
     $.getJSON(url).success(function(images){
       var html = [];
@@ -213,7 +214,7 @@ $(document).ready(function(){
 
         var template = _.template(templateString.join("\n"));
 
-        var marker_image, newMarker;
+        var marker_image, newMarker, searchRadius, searchRadiusOptions;
 
         if(!tracker.hasOwnProperty(image.id)){
           html += template({image: image});
@@ -233,7 +234,21 @@ $(document).ready(function(){
               visible     : true,
           });
 
+          searchRadiusOptions = {
+            strokeColor: '#81C9EA',
+            strokeOpacity: 0.08,
+            strokeWeight: 1,
+            fillColor: '#81C9EA',
+            fillOpacity: 0.03,
+            map: map,
+            center: new google.maps.LatLng(lat, lng),
+            radius: radius
+          };
+
+          searchRadius = new google.maps.Circle(searchRadiusOptions);
+
           tracker[newMarker.id] = newMarker;
+          circles.push(searchRadius);
           markers.push(newMarker);
 
           google.maps.event.addListener(newMarker, 'click', markerClick);
@@ -268,6 +283,12 @@ $(document).ready(function(){
     // map.panTo(this.position);
   }
 
+  function removeCircles(circles){
+    _.each(circles, function(circle){
+      circle.setMap(null);
+    });
+  }
+
   // remove all markers from map and images from sidebar
   function removeMarkers(markers){
     $.each(markers, function(id, marker){
@@ -292,7 +313,7 @@ $(document).ready(function(){
         min : 2,
         max : 1000,
        step : 1, 
-      value : 20,
+      value : 10,
       slide : function(event, ui) {
                 $('#radius-slider').data('radius', ui.value);
                 $("#radius").val(Math.round(ui.value * 0.6214) + ' MILES');
