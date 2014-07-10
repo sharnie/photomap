@@ -146,7 +146,7 @@ $(document).ready(function(){
       removeMarkers(markers);
     });
 
-    google.maps.event.addListener(map, 'dblclick', function(event){
+    google.maps.event.addListener(map, 'click', function(event){
       currentLat = event.latLng.lat();
       currentLng = event.latLng.lng();
 
@@ -154,7 +154,6 @@ $(document).ready(function(){
     });
 
   }
-
 
   var markers     = [];
   var tracker     = {};
@@ -295,7 +294,7 @@ $(document).ready(function(){
       value : 20,
       slide : function(event, ui) {
                 $('#radius-slider').data('radius', ui.value);
-                $("#radius").val(ui.value + ' KM');
+                $("#radius").val(Math.round(ui.value * 1.60934) + ' MILES');
               },
      change : function(event, ui) {
                 removeMarkers(markers);
