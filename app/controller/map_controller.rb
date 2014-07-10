@@ -1,12 +1,9 @@
+require 'pry'
+
 class MapController < ApplicationController
   get '/' do
     @user = CLIENT.user if user_signed_in?
     erb :'map/index'
-  end
-
-  # login url
-  get "/oauth/connect" do
-    redirect Instagram.authorize_url(:redirect_uri => CALLBACK_URL, :scope => 'relationships likes')
   end
 
   # logout url
@@ -14,6 +11,24 @@ class MapController < ApplicationController
     session.clear
     redirect '/'
   end
+
+  # instagram login url
+  get "/oauth/connect" do
+    redirect Instagram.authorize_url(:redirect_uri => CALLBACK_URL, :scope => 'relationships likes')
+  end
+
+  # get '/oauth/twitter/connect' do
+  # end
+
+  # get '/oauth/twitter/callback' do
+  #   client = Twitter::REST::Client.new do |config|
+  #     config.consumer_key        = "8BPo9SH3QkcfY3HTh244L4a8j"
+  #     config.consumer_secret     = "bSw80xX1hDGMcqpceaiPy9fjFfBqymJ8wcJEWagk4SAzA2eNAW"
+  #     config.access_token        = "534838150-RcYP3s1Ke4b51r64IUkkdulUAPsO71XD4OjIs2Oi"
+  #     config.access_token_secret = "fnr7xJkwDlTQRW1d3T2yCEqfRa1trNQi2AHTG3qhlCRS0"
+  #   end
+  #   binding.pry
+  # end
 
   # redirect user after authentication on Instagram and set access token
   get "/oauth/callback" do

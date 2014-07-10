@@ -154,9 +154,17 @@
   background-image: -webkit-linear-gradient(#2badf3, #2492db);
   background-image: linear-gradient(#2badf3, #2492db);
   border: 1px solid #106fa9;
-  text-shadow: 1px 0px 0px rgba(0,0,0,0.4);
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.4);
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.18),inset 0 0 1px 1px rgba(255,255,255,0.09);
 }
-.btn-primary:hover, .btn-primary:focus {
-  border-color: #1689c7;
+.btn-primary:hover, .btn-primary:focus {border-color: #1689c7;}
+.btn-instagram {
+  color: #fff;
+  background-color: #517fa4;
+  background-image: -webkit-linear-gradient(#517fa4,#306088);
+  background-image: linear-gradient(#517fa4, #306088);
+  border: 1px solid #1c5380;
+  box-shadow: 0 1px 0 rgba(111,151,182,.5)inset,0 -1px 0 rgba(111,151,182,.2)inset,0 1px 1px rgba(0,0,0,.2);
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.4);
 }
+.btn-instagram:hover, .btn-instagram:focus {color: #fff;}

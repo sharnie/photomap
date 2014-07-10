@@ -162,6 +162,7 @@ $(document).ready(function(){
 
   function fetchImage(lat, lng){
     var radius = $('#radius-slider').data('radius');
+    console.log(radius);
 
     var url = '/map/' + lat + '/' + lng + '/'+ radius +'/media_search.json';
 
@@ -288,13 +289,13 @@ $(document).ready(function(){
   $(function() {
     $("#slider").slider({
       range : "max",
-        min : 10,
+        min : 2,
         max : 1000,
-        step: 5, 
+       step : 1, 
       value : 20,
       slide : function(event, ui) {
                 $('#radius-slider').data('radius', ui.value);
-                $("#radius").val(Math.round(ui.value * 1.60934) + ' MILES');
+                $("#radius").val(Math.round(ui.value * 0.6214) + ' MILES');
               },
      change : function(event, ui) {
                 removeMarkers(markers);
