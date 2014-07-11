@@ -280,7 +280,22 @@ $(document).ready(function(){
     });
 
     this.setIcon(markerActive);
-    // map.panTo(this.position);
+
+    var _this      = this;
+    var thumbnails = $('.thumbnail');
+
+    _.find(thumbnails, function(thumbnail){
+      if($(thumbnail).hasClass('active')){
+        $(thumbnail).removeClass('active')
+      }
+    });
+
+    _.find(thumbnails, function(thumbnail){
+      if($(thumbnail).data('id') === _this.id){
+        $(thumbnail).addClass('active').scrollTop( 300 );
+      }
+    });
+
   }
 
   function removeCircles(circles){
@@ -291,6 +306,8 @@ $(document).ready(function(){
 
   // remove all markers from map and images from sidebar
   function removeMarkers(markers){
+    removeCircles(circles);
+
     $.each(markers, function(id, marker){
       marker.setMap(null);
     });

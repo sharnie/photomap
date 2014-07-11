@@ -142,6 +142,9 @@ body {
   padding: 0px;
   overflow: hidden;
 }
+.thumbnail.active {
+  box-shadow: 0px 0px 10px 2px #81C9EA;
+}
 .thumbnail .media-foot {
   padding: 9px;
   color: #333;

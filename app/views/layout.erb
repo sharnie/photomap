@@ -23,7 +23,11 @@
             <li><a id="current-user" data-user-id="<%= @user.id %>" href="#">Profile</a></li>
             <li><a href="/oauth/logout">Log out</a></li>
           <% else %>
-            <li><a href="/oauth/connect">Sign in</a></li>
+            <li>
+              <button type="button" class="btn btn-instagram navbar-btn" onclick="parent.location='/oauth/connect'">
+                <i class="fa fa-instagram"></i> SIGN IN INSTAGRAM
+              </button>
+            </li>
           <% end %>
         </ul>
       </div>
