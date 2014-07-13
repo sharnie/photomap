@@ -1,4 +1,4 @@
-$(document).ready(function(){
+-$(document).ready(function(){
   var map, currentLat, currentLng;
 
   // get location
@@ -292,7 +292,7 @@ $(document).ready(function(){
 
     _.find(thumbnails, function(thumbnail){
       if($(thumbnail).data('id') === _this.id){
-        $(thumbnail).addClass('active').scrollTop( 300 );
+        $(thumbnail).addClass('active');
       }
     });
 
@@ -333,7 +333,7 @@ $(document).ready(function(){
       value : 10,
       slide : function(event, ui) {
                 $('#radius-slider').data('radius', ui.value);
-                $("#radius").val(Math.round(ui.value * 0.6214) + ' MILES');
+                $("#radius").val(ui.value);
               },
      change : function(event, ui) {
                 removeMarkers(markers);
