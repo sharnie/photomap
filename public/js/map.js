@@ -1,5 +1,8 @@
--$(document).ready(function(){
-  var map, currentLat, currentLng;
+$(document).ready(function(){
+  var map,
+      currentLat,
+      currentLng,
+      radius = $('#radius-slider').data('radius');
 
   // get location
   (function getLocation() {
@@ -126,7 +129,7 @@
 
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-    fetchImage(currentLat, currentLng);
+    fetchImage(currentLat, currentLng, radius);
 
     // Create the search box and link it to the UI element.
     var input = (document.getElementById('place-search'));
@@ -139,18 +142,24 @@
       currentLat = places[0].geometry.location.k;
       currentLng = places[0].geometry.location.B;
 
-      fetchImage(currentLat, currentLng);
+      $.getJSON('/map/' + currentLat + '/' + currentLng + '/locations.json').success(function(data){
+        console.log(data);
+        console.log('worked');
+      });
+
+      fetchImage(currentLat, currentLng, radius);
 
       map.panTo(places[0].geometry.location);
       map.setZoom(16);
       removeMarkers(markers);
+
     });
 
     google.maps.event.addListener(map, 'click', function(event){
       currentLat = event.latLng.lat();
       currentLng = event.latLng.lng();
 
-      fetchImage(currentLat, currentLng);
+      fetchImage(currentLat, currentLng, radius);
     });
 
   }
@@ -161,8 +170,7 @@
   var defaultIcon = '/images/marker3.png';
   var activeIcon  = '/images/marker_active.png';
 
-  function fetchImage(lat, lng){
-    var radius = $('#radius-slider').data('radius');
+  function fetchImage(lat, lng, radius){
     var url = '/map/' + lat + '/' + lng + '/'+ radius +'/media_search.json';
 
     removeCircles(circles);
@@ -337,7 +345,7 @@
               },
      change : function(event, ui) {
                 removeMarkers(markers);
-                fetchImage(currentLat, currentLng);
+                fetchImage(currentLat, currentLng, radius);
               }
     });
   });

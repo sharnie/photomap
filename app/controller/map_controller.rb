@@ -6,13 +6,11 @@ class MapController < ApplicationController
     erb :'map/index'
   end
 
-  # logout url
   get "/oauth/logout" do
     session.clear
     redirect '/'
   end
 
-  # instagram login url
   get "/oauth/connect" do
     redirect Instagram.authorize_url(:redirect_uri => CALLBACK_URL, :scope => 'relationships likes')
   end
@@ -107,6 +105,16 @@ class MapController < ApplicationController
   get '/users/:id/unfollow.json' do
     content_type :json
     response = CLIENT.unfollow_user(params[:id])
+    response.to_json
+  end
+
+  get '/test' do
+    erb :'map/test'
+  end
+
+  get '/map/:lat/:lng/locations.json' do
+    media = user_signed_in? ? CLIENT : Instagram
+    response = media.location_search(params[:lat], params[:lng])
     response.to_json
   end
 end

@@ -9,6 +9,7 @@ gem 'twitter'
 gem 'rake'
 gem 'require_all'
 gem 'dotenv'
+gem 'twitter'
 
 group :production do
   gem 'pg', '~> 0.17.1'
