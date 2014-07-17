@@ -1,8 +1,7 @@
 class ProfileController < ApplicationController
   
   get "/profile/:user_id" do
-    @client = CLIENT
-    @user = CLIENT.user(params[:user_id]).id
+    @user = CLIENT.user(params[:user_id])
 
     erb :"profile/show"
   end
