@@ -6,4 +6,5 @@ class ProfileController < ApplicationController
 
     erb :"profile/show"
   end
+  
 end
