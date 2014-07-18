@@ -194,7 +194,7 @@ $(document).ready(function(){
           "                      <img class='thumb-sm' src='<%= image.user.profile_picture %>' alt='...'>",
           "                    </a>",
           "                    <div class='media-user text-muted'>",
-          "                      <a class='bold username text-ellipsis' href='http://instagram.com/<%= image.user.username %>' target='_blank'><%= image.user.username %></a>",
+          "                      <a class='bold username text-ellipsis' href='/profile/<%= image.user.id %>'><%= image.user.username %></a>",
           "                      <p class='text-ellipsis'><%= image.user.full_name %></p>",
           "                    </div>",
           "                  </div><!-- .media -->",

@@ -1,1 +1,60 @@
-profile.css
+/*-------Profile Styles--------*/
+
+/*ul{
+  margin:0;
+  padding:0;
+}*/
+#profile-container{
+  width:700px;
+  margin: 0 auto;
+}
+
+#profile-container ul{
+  list-style: none;
+}
+.user-info{
+  color:#888;
+  width:20%;
+  float:left;
+  /*text-shadow: 0 1px 0*/
+  margin-top: 15px;
+}
+.user-info img{
+  border: 8px solid #fff;
+  width:125px;
+}
+
+.user-imgs{
+  /*border:2px solid red;*/
+  width:80%;
+  float:right;
+  background-color: #f1f1f1;
+  padding:15px 15px 0 15px;
+
+  /*height:400px;*/
+}
+.user-imgs .thumbnails{
+  text-align: center;
+}
+.user-imgs .thumbnails img {
+  width:170px;
+  border: 10px #fff solid;
+  margin-bottom: 15px;
+}
+
+.user-imgs .thumbnails ul li{
+  display:inline-block;
+    float:none;
+    text-align:left;
+    margin-right:4px;
+    /** > :last-child { margin-bottom: 0 !important; margin-right: 0 !important; }*/
+}
+.user-imgs .thumbnails ul li > :nth-child(3n+3) { 
+  margin-right: 0; 
+}
+
+.like{
+  /*width:100%;*/
+  background-color: #fff;
+  padding: 5px;
+}

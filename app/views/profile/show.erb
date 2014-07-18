@@ -1,32 +1,58 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-3">
+      <div class="thumbnail" data-id="766665432371273729_35500999">
+        <div class="media-head">
+          <img src="<%= @user.profile_picture %>" alt="...">
+          <span class="caption"></span>
+        </div>
+        <div class="media-foot">
+          Username: ;dskldk
+        </div><!-- .media-foot -->
+      </div>
+    </div>
+    
+    <div class="col-xs-12 col-sm-9">
+      <div class="row">
 
-
-<div id="profile-container">
-  
-  <div class="user-info">
-    <ul>
-      <li>
-        <img class = "box-shadow" src="http://img3.wikia.nocookie.net/__cb20111014130411/mylittlebrony/images/a/a9/250px-AppleBloomSquare.png">
-      </li>
-      <li class="li-text bold"><%= @user.username %></li>
-      <li class="li-text">2 hours ago</li>
-    </ul>
-  </div>
-  
-  <div class="user-imgs box-shadow">
-    <div class = "thumbnails">
-      <ul> 
-        <% @user_photos.each do |user| %>
-          <img src="<%= user.images.standard_resolution.url %>">
+        <% @user_photos.each do |data| %>
+          <div class="col-xs-12 col-sm-4">
+            <div class="thumbnail" data-id="766665432371273729_35500999">
+              <div class="media-head">
+                <img src="<%= data.images.low_resolution.url %>" alt="...">
+                <span class="caption"></span>
+              </div>
+              <div class="media-foot">
+                <div class="col-xs-8">
+                  <div class="row">
+                    <div class="media">
+                      <a class="avatar pull-left" href="#">
+                        <img class="thumb-sm" src="<%= data.user.profile_picture %>" alt="...">
+                      </a>
+                      <div class="media-user text-muted">
+                        <a class="bold username text-ellipsis" href="/profile/35500999">camilleschaer</a>
+                        <p class="text-ellipsis">I'm julienne</p>
+                      </div>
+                    </div><!-- .media -->
+                  </div><!-- .row -->
+                </div><!-- .col-xs-* -->
+                <div class="col-xs-4">
+                  <div class="row">
+                    <div class="pull-right like" data-image-id="766665432371273729_35500999">
+                      
+                        <button class="btn btn-default">
+                          <i class="fa fa-heart"></i>
+                        </button>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div><!-- .caption -->
+            </div>
+          </div>
         <% end %>
-        
-          <li>
-            <img class="box-shadow" src="<%= @user.profile_picture %>">
-          </li>
-      </ul>
+
+      </div><!-- .row -->
     </div>
   </div>
-
-</div><!-- .profile-container -->
-
-
-
+</div><!-- .container -->
