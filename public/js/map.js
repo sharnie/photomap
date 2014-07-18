@@ -25,7 +25,7 @@ $(document).ready(function(){
     switch(error.code){
       case error.PERMISSION_DENIED:
         currentLat = 40.7035617;
-        currentLng = -73.9883172
+        currentLng = -73.9883172;
         initialize(currentLat, currentLng);
         break;
       case error.POSITION_UNAVAILABLE:
@@ -269,6 +269,8 @@ $(document).ready(function(){
   }
 
   function markerClick(){
+    console.log(this);
+    
     this.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
 
     var markerDefault = {
