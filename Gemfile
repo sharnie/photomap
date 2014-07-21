@@ -13,6 +13,7 @@ gem 'twitter'
 
 group :production do
   gem 'pg', '~> 0.17.1'
+  gem 'thin'
 end
 
 group :test, :development do
